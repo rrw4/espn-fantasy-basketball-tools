@@ -11,6 +11,8 @@ base_scoreboard_url = 'http://games.espn.go.com/fba/scoreboard?leagueId=47525&se
 base_player_ratings_url_1 = 'http://games.espn.go.com/fba/playerrater?leagueId='
 base_player_ratings_url_2 = '&teamId=1&startIndex='
 
+teams = []
+rosters = {}
 player_ratings = {}
 
 def build_rosters_url(league_id):
@@ -40,36 +42,26 @@ def build_player_ratings(num_players):
                 player_rating = 0 #temporary
             player_ratings[player_id] = player_rating #TODO: list for rating by each category
 
-class Standings:
-    def get_standings(self):
-        self.dom = curl(base_url_standings)
-
-class Roster:
-    teams = []
-    rosters = {}
-
-    def get_rosters(self, league_id):
-        self.rosters_dom = curl(build_rosters_url(league_id))
-        self.teams_dom = self.rosters_dom.find_all('table', class_='playerTableTable')
-        for team_dom in self.teams_dom:
-            team_name = team_dom.find(class_='playerTableBgRowHead').a.string
-            self.teams.append(team_name)
-            players_dom = team_dom.find_all('td', class_='playertablePlayerName')
-            players_list = []
-            for player_dom in players_dom:
-                player_name = player_dom.a.string
-                player_id = int(player_dom.a['playerid'])
-                team_pos_string = player_dom.contents[1].string #TODO: parse string to get NBA team and position eligibility
-                players_list.append((player_name, player_id))
-            self.rosters[team_name] = players_list
-
+def get_rosters(league_id):
+    rosters_dom = curl(build_rosters_url(league_id))
+    teams_dom = rosters_dom.find_all('table', class_='playerTableTable')
+    for team_dom in teams_dom:
+        team_name = team_dom.find(class_='playerTableBgRowHead').a.string
+        teams.append(team_name)
+        players_dom = team_dom.find_all('td', class_='playertablePlayerName')
+        players_list = []
+        for player_dom in players_dom:
+            player_name = player_dom.a.string
+            player_id = int(player_dom.a['playerid'])
+            team_pos_string = player_dom.contents[1].string #TODO: parse string to get NBA team and position eligibility
+            players_list.append((player_name, player_id))
+        rosters[team_name] = players_list
 
 if __name__ == "__main__":
     build_player_ratings(500)
-    r = Roster()
-    r.get_rosters(league_id)
-    for team in r.teams:
-        roster = r.rosters.get(team)
+    get_rosters(league_id)
+    for team in teams:
+        roster = rosters.get(team)
         team_rating = 0
         players_counted = 0
         for player in roster:
