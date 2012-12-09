@@ -6,8 +6,10 @@ from bs4 import BeautifulSoup
 league_id = sys.argv[1]
 
 base_rosters_url = 'http://games.espn.go.com/fba/leaguerosters?leagueId='
-base_standings_url = 'http://games.espn.go.com/fba/standings?leagueId=47525&seasonId=2013'
-base_scoreboard_url = 'http://games.espn.go.com/fba/scoreboard?leagueId=47525&seasonId=2013'
+base_standings_url_1 = 'http://games.espn.go.com/fba/standings?leagueId='
+base_standings_url_2 = '&seasonId=2013'
+base_scoreboard_url_1 = 'http://games.espn.go.com/fba/scoreboard?leagueId='
+base_scoreboard_url_2 = '&seasonId=2013'
 base_player_ratings_url_1 = 'http://games.espn.go.com/fba/playerrater?leagueId='
 base_player_ratings_url_2 = '&teamId=1&startIndex='
 
