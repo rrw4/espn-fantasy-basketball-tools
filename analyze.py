@@ -68,5 +68,15 @@ if __name__ == "__main__":
     build_player_ratings(500)
     r = Roster()
     r.get_rosters(league_id)
-    print r.teams
-    print r.rosters
+    for team in r.teams:
+        roster = r.rosters.get(team)
+        team_rating = 0
+        players_counted = 0
+        for player in roster:
+            player_rating = player_ratings.get(player[1])
+            if player_rating != None and player_rating > 0:
+                team_rating += player_rating
+                players_counted += 1
+        print team
+        print team_rating
+        print players_counted
