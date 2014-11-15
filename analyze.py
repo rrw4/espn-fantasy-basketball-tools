@@ -64,13 +64,7 @@ if __name__ == "__main__":
     get_rosters(league_id)
     for team in teams:
         roster = rosters.get(team)
-        team_rating = 0
-        players_counted = 0
+        team_rating = sum(v for k,v in player_ratings.iteritems() if k in [player[1] for player in roster])
+        print "{0} ({1} total rating)".format(team, team_rating)
         for player in roster:
-            player_rating = player_ratings.get(player[1])
-            if player_rating != None and player_rating > 0:
-                team_rating += player_rating
-                players_counted += 1
-        print team
-        print team_rating
-        print players_counted
+            print "  {0} ({1})".format(player[0], float(player_ratings.get(player[1]) or 0))
